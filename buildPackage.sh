@@ -1,0 +1,1 @@
+docker buildx build -f ./Dockerfile_build --output "type=local,dest=./pkg" .

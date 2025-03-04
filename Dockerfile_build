@@ -1,0 +1,35 @@
+FROM alpine:3 AS build
+# Install dependencies
+RUN apk add --no-cache --virtual .build-deps \
+		coreutils \
+		dpkg-dev \
+		dpkg \
+		gcc \
+		linux-headers \
+		make \
+		musl-dev \
+		wget \
+		7zip \
+        build-base \
+        g++ \
+        git \
+        go
+
+COPY . /tmp/build
+WORKDIR /tmp/build
+
+# Build smartctl_exporter
+ENV CGO_ENABLED=0
+RUN go mod tidy && \
+    go build -o smartctl_exporter
+
+# Create a new directory to store the smartctl files
+RUN mkdir -p /usr/local/app
+
+# Create an archive of the smartctl files
+RUN cp /tmp/build/smartctl_exporter  /usr/local/app/ && \
+    tar cvfz /smartctl_exporter-linux-x64.tar.gz -C /usr/local/app/ .
+
+# ----------------------------------------
+FROM scratch AS package
+COPY --from=build /smartctl_exporter-linux-x64.tar.gz/ /
