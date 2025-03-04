@@ -96,6 +96,9 @@ var (
 	smartctlPath = kingpin.Flag("smartctl.path",
 		"The path to the smartctl binary",
 	).Default("/usr/sbin/smartctl").String()
+	smartctlArgs = kingpin.Flag("smartctl.args",
+		"Additional arguments to pass to smartctl",
+	).Default("").String()
 	smartctlInterval = kingpin.Flag("smartctl.interval",
 		"The interval between smartctl polls",
 	).Default("60s").Duration()
