@@ -1,1 +1,3 @@
-docker buildx build -f ./Dockerfile_build --output "type=local,dest=./pkg" .
+docker buildx build -f ./Dockerfile_build \
+ --platform linux/amd64 \
+ --output "type=local,dest=./pkg" .
